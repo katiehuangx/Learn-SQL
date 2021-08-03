@@ -1,5 +1,7 @@
 # 📝 Katie's SQL Notes
 
+Hi, I'm Katie! This is a WIP notes on SQL. 
+
 ## 📚 Table of Content
 - Create, alter, drop, truncate and delete database 
 - Create, drop and delete index
@@ -12,6 +14,7 @@
 - Basics
 - Filtering techniques
   - TOP clause
+- Match text with LIKE and wildcards
 - JOINS
 - Functions
   - Aggregate functions
@@ -25,6 +28,60 @@
   - If else
   - CASE WHEN
 
+***
+
+## 📌 Logical Operators
+
+Insert a table here
+
+
+**NULL Values**
+
+Take note that we cannot use `!=` or `<>` on NULL values.
+
+````sql
+SELECT WorkOrderID, ScrappedQty, ScrapReasonID
+FROM Production.WorkOrder
+WHERE ScrapReasonID IS NOT NULL;
+````
+
+***
+
+## 📌 Comparison Operators
+
+Insert a table here
+
+
+
+
+## 📌 Match texts using LIKE and Wildcards
+
+````sql
+WHERE first_name LIKE 'a%' -- Finds any values that starts with "a"
+WHERE first_name LIKE '%a' -- Finds any values that ends with "a"
+WHERE first_name LIKE '%ae%' -- Finds any values that have "ae" in the middle
+WHERE first_name LIKE '_b%' -- Finds any values with "b" in the second position
+WHERE first_name LIKE 'a_%_%' -- Finds any values that starts with "a" and are at least 3 characters in length
+WHERE first_name LIKE 'a%o' -- Finds any values that starts with "a" and ends with "o"
+WHERE first_name LIKE 'a___' -- Finds any value that starts with "a" and has 3 characters
+WHERE first_name LIKE '[abc]%' -- Finds any values with "a", "b" or "c"
+WHERE first_name LIKE '[a-f]%' -- Finds any values with "a" to "f"
+WHERE first_name LIKE 'a[l-n]' -- Finds any values that starts with "a" and has "l", "m" or "n"
+WHERE first_name LIKE 'a[c-e]__' -- Finds any values that starts with "a" and has "c", "d" or "e" in the middle and ends with 2 characters
+````
+
+***
+
+**DISTINCT Clause**
+
+To remove duplicates and retrieve unique values only.
+````sql
+SELECT DISTINCT City, StateProvinceID
+FROM Person.Address
+ORDER BY City;
+````
+
+***
 
 ## 📌 Filtering Techniques
 
