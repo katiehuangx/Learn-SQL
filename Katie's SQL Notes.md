@@ -215,7 +215,10 @@ ORDER BY City;
 | >=                  | Greater than or equal to    |
 | <                   | Less than    |
 | <=                  | Less than or equal to    |
-
+| BETWEEN ... AND ... |     |
+| NOT BETWEEN ... AND ... |     |
+| IN (..., ..., ...)    |    |
+| NOT IN (..., ..., ...)  | |
 
 ### NULL Values
 
