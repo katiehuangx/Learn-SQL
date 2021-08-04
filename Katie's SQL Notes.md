@@ -146,6 +146,9 @@ CREATE NONCLUSTERED INDEX IX_guests_last_name -- Name of your index
 ON guests (last_name); -- table name and column name
 ````
 
+### Drop Index
+
+
 ***
 
 ## 📌 Data Types
