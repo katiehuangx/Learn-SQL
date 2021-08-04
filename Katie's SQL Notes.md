@@ -1,13 +1,13 @@
 # 📝 Katie's SQL Notes
 
-Hi, I'm Katie! This is a WIP notes on SQL. 
+Hi, I'm Katie! This is my work-in-progress notes on SQL. 
 
 ## 📚 Table of Content
 - Create, alter, drop, truncate and delete database 
 - Create, drop and delete index
 - Alter table and column
 - Set primary and foreign key
-- Data types
+- Data types	
   - Text
   - Numerical
   - Date time
@@ -39,6 +39,7 @@ Hi, I'm Katie! This is a WIP notes on SQL.
 - Create temp table
 - Subquery
 - PIVOT
+- Create and use variables
 - Result set operators
   - Combine results with UNION
   - Return distinct rows with EXCEPT
@@ -70,7 +71,7 @@ ORDER BY TaxRate DESC;
 ````
 ***
 
-**2. Limit results with TOP PERCENT**
+**Limit results with TOP PERCENT**
 
 Specify the number of percentage of results to generate. For example, to generate the first 50% of the results, use `TOP 50 PERCENT`. 
 
@@ -81,7 +82,7 @@ ORDER BY TaxRate DESC;
 ````
 ***
 
-**3. Limit results with TOP X WITH TIES**
+**Limit results with TOP X WITH TIES**
 
 Results include multiple records of the same values from the last record. 
 
@@ -113,13 +114,11 @@ ORDER BY City;
 | ------------------- | ----------- |
 | =                   | Equal to    |
 | !=                  | Not equal to    |
-| <>                   | Not equal to   |
+| <>                  | Not equal to   |
 | >                   | Greater than    |
-| >=                   | Greater than or equal to    |
+| >=                  | Greater than or equal to    |
 | <                   | Less than    |
-| <=                   | Less than or equal to    |
-
-
+| <=                  | Less than or equal to    |
 
 ***
 
@@ -173,6 +172,8 @@ JOIN Person.PersonPhone AS pp
 	ON p.BusinessEntityID = pp.BusinessEntityID;
 ````  
 
+***
+
 ### Left Joins
 
 ````sql
@@ -181,7 +182,7 @@ FROM Person.Person AS p
 LEFT JOIN HumanResources.Employee AS e
 	ON p.BusinessEntityID = e.BusinessEntityID;
 ````
-
+***
 
 ### Right Joins
 
@@ -192,6 +193,7 @@ RIGHT JOIN HumanResources.Employee AS e
 	ON p.BusinessEntityID = e.BusinessEntityID;
 ````
 
+***
 ### Cross Joins
 
 For example, table_1 has 10 rows and table_2 has 5 rows. A `CROSS JOIN` would result in 10 rows x 5 rows = 50 rows table.
@@ -217,6 +219,7 @@ GROUP BY City, StateProvinceID
 ORDER BY AddressCount DESC;
 ````
 
+***
 ### GROUP BY and HAVING
 
 `HAVING` must be used in conjuction with `GROUP BY`.
@@ -243,22 +246,70 @@ HAVING City = 'New York'
 | STDEV, VAR, VARP()      | Self-explanatory            |
 
 
-
+***
 ### String Functions
 
 | String Functions  | Description                 |
 | ----------------- | --------------------------- |
-| UPPER()           | Convert value   |
-| LOWER()           | Count unique values only    |
-| LEN()             |                             |
-| TRIM()            | Self-explanatory            |
-| LTRIM()           | Self-explanatory            |
-| RTRIM()           | Self-explanatory            |
-| CONCAT()          | Self-explanatory            |
+| UPPER()           | Convert 'NaMe' into UPPERCAESE  |
+| LOWER()           | Convert 'NaMe' into lowercase   |
+| LEN()             | Count number of characters in a value                            |
+| TRIM()            | Trim blank spaces in a value            |
+| LEFT(,3)         | Return 1st 3 characters from the left            |
+| RIGHT(,3)        | Returns 1st 3 characters from the right           |
+| CONCAT()          | Combine 2 or more values          |
+| CONCAT_WS()       | To insert ' ' (blank space/-) between all values          |
+
+Refer to examples below.
+
+````sql
+SELECT FirstName, LastName, 
+	UPPER(FirstName) AS FName, LOWER(LastName) AS LName, 
+	LEN(FirstName) AS LenFName,
+	LEFT(LastName, 3) AS First3, RIGHT(LastName,3) AS Last3,
+	TRIM(LastName) AS TrimmedName
+FROM Person.Person;
+````
+
+````sql
+SELECT FirstName, LastName,
+	CONCAT(FirstName, ' ', MiddleName, ' ', LastName) AS FullName,
+	CONCAT_WS(' ', FirstName, MiddleName, LastName) AS FullNameWS -- 'WS' stands for 'With Separator'
+FROM Person.Person;
+````
+***
 
 ### Mathematical Functions
 
+| Mathematical Functions  | Description                 |
+| ----------------- | --------------------------- |
+| ROUND(,2)           | Round with 2 decimals  |
+| ROUND(,-2           | Round up to nearest hundreds   |
+| CEILING()           | Round up to nearest integer                           |
+| FLOOR()            | Round down to nearest integer            |
+
+````sql
+SELECT BusinessEntityID, SalesYTD,
+	ROUND(SalesYTD, 2) AS Round2, -- 2 decimals
+	ROUND(SalesYTD, -2) AS Round100, -- Round up to nearest hundreds
+	CEILING(SalesYTD) AS RoundCeiling, -- Round up to nearest integer
+	FLOOR(SalesYTD) AS RoundFloor -- Round down to nearest integer
+FROM Sales.SalesPerson;
+````
+***
 ### Date Functions
+
+| Date Functions  | Description                 |
+| ----------------| --------------------------- |
+| YEAR()          | Returns year from date  |
+| MONTH()         | Returns month from date   |
+| DAY()           | Returns day from date                           |
+| GETDATE()       | Returns today's date           |
+| GETDATEUTC()    | Returns today's date in            |
+| DATEDIFF()      |             |
+| FORMAT()        |             |
+| FORMAT()        |             |
+
 
 ***
 
@@ -268,7 +319,14 @@ HAVING City = 'New York'
 
 ## 📌 Condition statement
 
-### IIF
+### IIF 
+
+````sql
+SELECT IIF (SalesYTD > 2000000, 'Met sales goal', 'Has not met goal') AS Status,
+	COUNT(*)
+FROM Sales.SalesPerson
+GROUP BY IIF (SalesYTD > 2000000, 'Met sales goal', 'Has not met goal');
+````
 
 ### If Else
 
@@ -281,17 +339,160 @@ HAVING City = 'New York'
 ***
 ## 📌 Subquery
 
+### Subquery in SELECT
+````sql
+SELECT BusinessEntityID, SalesYTD, 
+	(SELECT MAX(SalesYTD) 
+	FROM Sales.SalesPerson) AS HighestSalesYTD,
+	(SELECT MAX(SalesYTD) 
+	FROM Sales.SalesPerson) - SalesYTD AS SalesGap
+FROM Sales.SalesPerson
+ORDER BY SalesYTD DESC
+````
+
+### Subquery in HAVING
+````sql
+SELECT SalesOrderID, SUM(LineTotal) AS OrderTotal
+FROM Sales.SalesOrderDetail
+GROUP BY SalesOrderID
+HAVING SUM(LineTotal) > 
+	(
+	SELECT AVG(ResultTable.MyValues) AS AvgValue -- subsquery no. 2. Cannot combine both subqueries as cannot do AVG(SUM(LineTotal))
+	FROM
+		(SELECT SUM(LineTotal) AS MyValues --subquery no. 1
+		FROM Sales.SalesOrderDetail
+		GROUP BY SalesOrderID) AS ResultTable
+	);
+````
+
+### Correlated Subquery
+
+````sql
+SELECT BusinessEntityID, FirstName, LastName,
+	(SELECT JobTitle
+	FROM HumanResources.Employee
+	WHERE BusinessEntityID = MyPeople.BusinessEntityID) AS JobTitle --Better to use LEFT JOIN as give same results
+FROM Person.Person AS MyPeople
+WHERE EXISTS (SELECT JobTitle
+		FROM HumanResources.Employee
+		WHERE BusinessEntityID = MyPeople.BusinessEntityID); -- Better to use JOIN or WHERE EXISTS
+
+````
+
 ***
 
 ## 📌 PIVOT
 
+````sql
+SELECT 'AverageListPrice' AS 'ProductLine', -- To add meaning to the table
+FROM
+	(SELECT ProductLine, ListPrice
+	FROM Production.Product) AS SourceData
+PIVOT (AVG(ListPrice) FOR ProductLine IN (M, R, S, T)) AS PivotTable; -- For every product line M, R, S, T we are going to find the average price
+````
+
+***
+
+## 📌 Create and Use Variables
+
+### Using DECLARE
+
+````sql
+DECLARE @MyFirstVariable INT;
+
+SET @MyFirstVariable = 10;
+
+SELECT @MyFirstVariable AS MyValue, 
+	@MyFirstVariable * 5 AS Multiplication,
+	@MyFirstVariable + 10 AS Addition
+
+
+DECLARE @VarColor VARCHAR(20) = 'Blue';
+
+SELECT ProductID, Name, ProductNumber, Color, ListPrice
+FROM Production.Product
+WHERE Color = @VarColor;
+````
+
+### Create counter for Looping Statement
+````sql
+DECLARE @Counter INT = 1;
+
+WHILE @Counter <= 3
+BEGIN
+	SELECT @Counter AS CurrentValue
+	SET @Counter = @Counter + 1
+END;
+````
+
+````sql
+DECLARE @Counter INT = 1;
+DECLARE @Product INT = 710;
+
+WHILE @Counter <= 3
+BEGIN
+	SELECT ProductID, Name, ProductNumber, Color, ListPrice
+	FROM Production.Product
+	WHERE ProductID = @Product
+	SET @Counter = @Counter + 1
+	SET @Product = @Product + 10
+END;
+````
 ***
 ## 📌 Result set operators
 
 ### Combine results with UNION
 
+````sql
+SELECT ProductCategoryID, NULL AS ProductSubCategoryID, Name -- Create an empty column to represent ProductSubCategoryID column from 2nd table. Both table data types must be same.
+FROM Production.ProductCategory
+UNION
+SELECT ProductCategoryID, ProductSubCategoryID, Name
+FROM Production.ProductSubcategory;
+````
+
+***
+
 ### Return distinct rows with EXCEPT
+
+````sql
+SELECT BusinessEntityID
+FROM Person.Person
+WHERE PersonType <> 'EM' -- Select everyone who is not an employee
+EXCEPT
+SELECT BusinessEntityID
+FROM Sales.PersonCreditCard; -- Everyone with credit card
+````
+
+You can achieve the same results as above using a `LEFT JOIN` below.
+
+````sql
+SELECT p.BusinessEntityID
+FROM Person.Person AS p
+LEFT JOIN Sales.PersonCreditCard AS c --Same results using LEFT JOIN
+	ON p.BusinessEntityID = c.BusinessEntityID
+WHERE p.PersonType <> 'EM' AND c.CreditCardID IS NULL;
+````
+
+***
 
 ### Return common rows with INTERSECT
 
+````sql
+SELECT ProductID
+FROM Production.ProductProductPhoto
+INTERSECT
+SELECT ProductID
+FROM Production.ProductReview;
+````
+
+
+You can achieve the same results as above using `JOIN` below.
+
+````sql
+SELECT DISTINCT(p.ProductID) -- Same results using JOIN
+FROM Production.ProductProductPhoto AS p
+JOIN Production.ProductReview AS r
+	ON p.ProductID = r.ProductID;
+````
 ***
