@@ -11,29 +11,117 @@ Hi, I'm Katie! This is a WIP notes on SQL.
   - Text
   - Numerical
   - Date time
-- Basics
-- Filtering techniques
-  - TOP clause
-- Match text with LIKE and wildcards
+- Base query
+- Filter techniques
+  - Using WHERE
+  - Limit results with TOP
+  - Remove duplicates with DISTINCT
+  - Comparison operators
+  - NULL values
+  - Match text with LIKE and wildcards
 - JOINS
+  - Inner Joins
+  - Left Joins
+  - Right Joins
+  - Full Outer Joins
+- Grouping records
+  - GROUP BY, COUNT and HAVING
 - Functions
   - Aggregate functions
-  - Numerical functions
   - String functions
-  - Date time functions
-- Create temp table
-- Subquery
+  - Mathematical functions
+  - Date functions
 - Window functions
 - Condition statement
-  - If else
+  - IIF
+  - If Else
   - CASE WHEN
+- Create temp table
+- Subquery
+- PIVOT
+- Result set operators
+  - Combine results with UNION
+  - Return distinct rows with EXCEPT
+  - Return common rows with INTERSECT
+ 
+***
+
+## 📌 Data Types
 
 ***
 
-## 📌 Logical Operators
+## 📌 Basics
 
-Insert a table here
+***
 
+## 📌 Filtering Techniques
+
+### Using WHERE
+
+***
+
+### Limit Results with TOP
+
+**1. Limit results with TOP**
+````sql
+SELECT TOP 3 TaxRate
+FROM Sales.SalesTaxRate
+ORDER BY TaxRate DESC;
+````
+***
+
+**2. Limit results with TOP PERCENT**
+
+Specify the number of percentage of results to generate. For example, to generate the first 50% of the results, use `TOP 50 PERCENT`. 
+
+````sql
+SELECT TOP 50 PERCENT TaxRate, Name
+FROM Sales.SalesTaxRate
+ORDER BY TaxRate DESC;
+````
+***
+
+**3. Limit results with TOP X WITH TIES**
+
+Results include multiple records of the same values from the last record. 
+
+For example, we are interested to know the Top 5 students in the classroom. Since there are 2 students who have received the same 5th highest score in the classroom, hence there will be a total of 6 rows of records in the results table - 1, 2, 3, 4, 5, 5.
+
+````sql
+SELECT TOP 5 WITH TIES student_name, score
+FROM classroom
+ORDER BY score;
+````
+
+***
+
+### Remove duplicates with DISTINCT
+
+To remove duplicates and retrieve unique values only.
+
+````sql
+SELECT DISTINCT City, StateProvinceID
+FROM Person.Address
+ORDER BY City;
+````
+
+***
+
+### Comparison operators
+
+| Comparison Operator | Description |
+| ------------------- | ----------- |
+| =                   | Equal to    |
+| !=                  | Not equal to    |
+| <>                   | Not equal to   |
+| >                   | Greater than    |
+| >=                   | Greater than or equal to    |
+| <                   | Less than    |
+| <=                   | Less than or equal to    |
+
+
+
+***
 
 **NULL Values**
 
@@ -44,17 +132,19 @@ SELECT WorkOrderID, ScrappedQty, ScrapReasonID
 FROM Production.WorkOrder
 WHERE ScrapReasonID IS NOT NULL;
 ````
+***
+
+**ISNULL**
+
+For example, replace NULL values with '99'.
+````sql
+SELECT WorkOrderID, ScrappedQty, ISNULL(ScrapReasonID, 99) AS ScrapReason
+FROM Production.WorkOrder;
+````
 
 ***
 
-## 📌 Comparison Operators
-
-Insert a table here
-
-
-
-
-## 📌 Match texts using LIKE and Wildcards
+**Match texts using LIKE and Wildcards**
 
 ````sql
 WHERE first_name LIKE 'a%' -- Finds any values that starts with "a"
@@ -72,47 +162,136 @@ WHERE first_name LIKE 'a[c-e]__' -- Finds any values that starts with "a" and ha
 
 ***
 
-**DISTINCT Clause**
+## 📌 JOINS
 
-To remove duplicates and retrieve unique values only.
+### Inner Joins
+
 ````sql
-SELECT DISTINCT City, StateProvinceID
+SELECT p.BusinessEntityID, p.FirstName, p.LastName, pp.PhoneNumber
+FROM Person.Person AS p
+JOIN Person.PersonPhone AS pp
+	ON p.BusinessEntityID = pp.BusinessEntityID;
+````  
+
+### Left Joins
+
+````sql
+SELECT p.BusinessEntityID, p.PersonType, p.FirstName, p.LastName, e.JobTitle
+FROM Person.Person AS p
+LEFT JOIN HumanResources.Employee AS e
+	ON p.BusinessEntityID = e.BusinessEntityID;
+````
+
+
+### Right Joins
+
+````sql
+SELECT p.BusinessEntityID, p.PersonType, p.FirstName, p.LastName, e.JobTitle
+FROM Person.Person AS p
+RIGHT JOIN HumanResources.Employee AS e
+	ON p.BusinessEntityID = e.BusinessEntityID;
+````
+
+### Cross Joins
+
+For example, table_1 has 10 rows and table_2 has 5 rows. A `CROSS JOIN` would result in 10 rows x 5 rows = 50 rows table.
+
+````sql
+SELECT d.Name AS DepartmentName, a.Name AS AddressName
+FROM HumanResources.Department AS d
+CROSS JOIN Person.AddressType AS a;
+````
+
+***
+
+## 📌 Grouping records
+
+### GROUP BY and COUNT
+
+Every column in `GROUP BY` clause needs to be in `SELECT` clause.
+
+````sql
+SELECT City, StateProvinceID, COUNT(*) AS AddressCount
 FROM Person.Address
-ORDER BY City;
+GROUP BY City, StateProvinceID
+ORDER BY AddressCount DESC;
+````
+
+### GROUP BY and HAVING
+
+`HAVING` must be used in conjuction with `GROUP BY`.
+
+````sql
+SELECT City, StateProvinceID, COUNT(*) AS AddressCount
+FROM Person.Address
+GROUP BY City, StateProvinceID
+HAVING City = 'New York'
 ````
 
 ***
 
-## 📌 Filtering Techniques
+## 📌 Functions
 
-### TOP Clause
+### Aggregate Functions
 
-**Limit results with TOP**
-````sql
-SELECT TOP 3 TaxRate
-FROM Sales.SalesTaxRate
-ORDER BY TaxRate DESC;
-````
+| Aggregate Functions     | Description                 |
+| ----------------------- | --------------------------- |
+| COUNT(*)                | Count total number of rows  |
+| COUNT(DISTINCT column)  | Count unique values only    |
+| COUNT_BIG()             |                             |
+| SUM, AVG, MIN, MAX()    | Self-explanatory            |
+| STDEV, VAR, VARP()      | Self-explanatory            |
+
+
+
+### String Functions
+
+| String Functions  | Description                 |
+| ----------------- | --------------------------- |
+| UPPER()           | Convert value   |
+| LOWER()           | Count unique values only    |
+| LEN()             |                             |
+| TRIM()            | Self-explanatory            |
+| LTRIM()           | Self-explanatory            |
+| RTRIM()           | Self-explanatory            |
+| CONCAT()          | Self-explanatory            |
+
+### Mathematical Functions
+
+### Date Functions
+
 ***
 
-**Limit results with TOP PERCENT**
+## 📌 Window functions
 
-Specify the number of percentage of results to generate. For example, to generate the first 50% of the results, use `TOP 50 PERCENT`. 
-
-````sql
-SELECT TOP 50 PERCENT TaxRate, Name
-FROM Sales.SalesTaxRate
-ORDER BY TaxRate DESC;
-````
 ***
-**Limit results with TOP X WITH TIES**
 
-Results include multiple records of the same values from the last record. 
+## 📌 Condition statement
 
-For example, we are interested to know the Top 5 students in the classroom. Since there are 2 students who have received the same 5th highest score in the classroom, hence there will be a total of 6 rows of records in the results table - 1, 2, 3, 4, 5, 5.
+### IIF
 
-````sql
-SELECT TOP 5 WITH TIES student_name, score
-FROM classroom
-ORDER BY score;
-````
+### If Else
+
+### CASE WHEN
+
+***
+
+## 📌 Create Temp Table
+
+***
+## 📌 Subquery
+
+***
+
+## 📌 PIVOT
+
+***
+## 📌 Result set operators
+
+### Combine results with UNION
+
+### Return distinct rows with EXCEPT
+
+### Return common rows with INTERSECT
+
+***
