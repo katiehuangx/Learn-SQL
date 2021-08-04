@@ -3,10 +3,23 @@
 Hi, I'm Katie! This is my work-in-progress notes on SQL. 
 
 ## 📚 Table of Content
-- Create, alter, drop, truncate and delete database 
-- Create, drop and delete index
+
+
+<details>
+<summary>
+Click here to expand!
+</summary>
+
+## Content
+	
+- Create and manage table
+  - Insert records
+  - Update table
+  - Truncate table
+  - Drop table
+- Create index
+  - Set primary key and foreign key
 - Alter table and column
-- Set primary and foreign key
 - Data types	
   - Text
   - Numerical
@@ -45,6 +58,94 @@ Hi, I'm Katie! This is my work-in-progress notes on SQL.
   - Return distinct rows with EXCEPT
   - Return common rows with INTERSECT
  
+</details>
+
+***
+
+## 📌 Table Design
+
+### Create Table
+````sql
+CREATE TABLE rooms (
+	room_id INT IDENTITY(1,1) NOT NULL, -- room_id is auto-incremental value
+	room_no CHAR(3) NOT NULL,
+	bed_type VARCHAR(15) NOT NULL,
+	rate SMALLMONEY NOT NULL);
+````
+
+### Insert Records
+````sql
+INSERT INTO rooms (room_no, bed_type, rate)
+	VALUES ('101', 'King', 120),
+		('102, 'Queen', 100),
+		('103, 'Deluxe', 80),
+		('104, 'King', 120),
+		('105, 'Queen', 100);
+````
+
+### Delete Records
+
+Before running `DELETE` clause, run a query to identify the exact row(s) for deletion to ensure that we delete only the unwanted rows.
+
+````sql
+DELETE FROM guests
+WHERE customer_id = 1005;
+````
+### Update Records
+
+Before running `UPDATE` clause, run a query to identify the exact row(s) to update to ensure that we update correct rows.
+
+````sql
+UPDATE guests
+SET checkin_date = '2021-05-10'
+WHERE reservation_id = 1001;
+````
+
+````sql
+UPDATE guests
+SET checkin_date = '2021-05-10',
+	checkout_date = '2021-05-15'
+WHERE reservation_id = 1001;
+````
+
+### Remove Table
+
+Use `TRUNCATE TABLE` to remove all data from the table, however the table still exists in the database.
+
+````sql
+TRUNCATE TABLE rooms;
+````
+
+Use `DROP TABLE` to delete the entire table from the database.
+
+````sql
+DROP TABLE rooms;
+````
+
+***
+
+## 📌 Index
+
+Index improves the speed of looking through the table's data. Without an index, SQL performs a table scan by searching for every record in the table. 
+
+It acts as 'Table of Content' in a book - it's (usually) much faster to look up something in a book by looking at its index than by flipping every page until we find what we want.
+
+### Create Index
+
+**Create Primary Key**
+
+````sql
+CREATE CLUSTERED INDEX IX_guests_guest_id -- Name of your index
+ON guests (guest_id); -- table name and column name
+````
+
+**Create Foreign Key**
+
+````sql
+CREATE NONCLUSTERED INDEX IX_guests_last_name -- Name of your index
+ON guests (last_name); -- table name and column name
+````
+
 ***
 
 ## 📌 Data Types
@@ -59,17 +160,14 @@ Hi, I'm Katie! This is my work-in-progress notes on SQL.
 
 ### Using WHERE
 
-***
-
 ### Limit Results with TOP
 
-**1. Limit results with TOP**
+**Limit results with TOP**
 ````sql
 SELECT TOP 3 TaxRate
 FROM Sales.SalesTaxRate
 ORDER BY TaxRate DESC;
 ````
-***
 
 **Limit results with TOP PERCENT**
 
@@ -80,7 +178,6 @@ SELECT TOP 50 PERCENT TaxRate, Name
 FROM Sales.SalesTaxRate
 ORDER BY TaxRate DESC;
 ````
-***
 
 **Limit results with TOP X WITH TIES**
 
@@ -94,8 +191,6 @@ FROM classroom
 ORDER BY score;
 ````
 
-***
-
 ### Remove duplicates with DISTINCT
 
 To remove duplicates and retrieve unique values only.
@@ -105,8 +200,6 @@ SELECT DISTINCT City, StateProvinceID
 FROM Person.Address
 ORDER BY City;
 ````
-
-***
 
 ### Comparison operators
 
@@ -120,9 +213,8 @@ ORDER BY City;
 | <                   | Less than    |
 | <=                  | Less than or equal to    |
 
-***
 
-**NULL Values**
+### NULL Values
 
 Take note that we cannot use `!=` or `<>` on NULL values.
 
@@ -131,7 +223,6 @@ SELECT WorkOrderID, ScrappedQty, ScrapReasonID
 FROM Production.WorkOrder
 WHERE ScrapReasonID IS NOT NULL;
 ````
-***
 
 **ISNULL**
 
@@ -141,9 +232,7 @@ SELECT WorkOrderID, ScrappedQty, ISNULL(ScrapReasonID, 99) AS ScrapReason
 FROM Production.WorkOrder;
 ````
 
-***
-
-**Match texts using LIKE and Wildcards**
+### Match texts using LIKE and Wildcards**
 
 ````sql
 WHERE first_name LIKE 'a%' -- Finds any values that starts with "a"
@@ -172,8 +261,6 @@ JOIN Person.PersonPhone AS pp
 	ON p.BusinessEntityID = pp.BusinessEntityID;
 ````  
 
-***
-
 ### Left Joins
 
 ````sql
@@ -182,7 +269,6 @@ FROM Person.Person AS p
 LEFT JOIN HumanResources.Employee AS e
 	ON p.BusinessEntityID = e.BusinessEntityID;
 ````
-***
 
 ### Right Joins
 
@@ -193,7 +279,6 @@ RIGHT JOIN HumanResources.Employee AS e
 	ON p.BusinessEntityID = e.BusinessEntityID;
 ````
 
-***
 ### Cross Joins
 
 For example, table_1 has 10 rows and table_2 has 5 rows. A `CROSS JOIN` would result in 10 rows x 5 rows = 50 rows table.
@@ -219,7 +304,6 @@ GROUP BY City, StateProvinceID
 ORDER BY AddressCount DESC;
 ````
 
-***
 ### GROUP BY and HAVING
 
 `HAVING` must be used in conjuction with `GROUP BY`.
@@ -246,7 +330,6 @@ HAVING City = 'New York'
 | STDEV, VAR, VARP()      | Self-explanatory            |
 
 
-***
 ### String Functions
 
 | String Functions  | Description                 |
@@ -277,7 +360,6 @@ SELECT FirstName, LastName,
 	CONCAT_WS(' ', FirstName, MiddleName, LastName) AS FullNameWS -- 'WS' stands for 'With Separator'
 FROM Person.Person;
 ````
-***
 
 ### Mathematical Functions
 
@@ -296,7 +378,7 @@ SELECT BusinessEntityID, SalesYTD,
 	FLOOR(SalesYTD) AS RoundFloor -- Round down to nearest integer
 FROM Sales.SalesPerson;
 ````
-***
+
 ### Date Functions
 
 | Date Functions  | Description                 |
@@ -439,6 +521,7 @@ BEGIN
 END;
 ````
 ***
+
 ## 📌 Result set operators
 
 ### Combine results with UNION
@@ -450,8 +533,6 @@ UNION
 SELECT ProductCategoryID, ProductSubCategoryID, Name
 FROM Production.ProductSubcategory;
 ````
-
-***
 
 ### Return distinct rows with EXCEPT
 
@@ -474,8 +555,6 @@ LEFT JOIN Sales.PersonCreditCard AS c --Same results using LEFT JOIN
 WHERE p.PersonType <> 'EM' AND c.CreditCardID IS NULL;
 ````
 
-***
-
 ### Return common rows with INTERSECT
 
 ````sql
@@ -485,7 +564,6 @@ INTERSECT
 SELECT ProductID
 FROM Production.ProductReview;
 ````
-
 
 You can achieve the same results as above using `JOIN` below.
 
