@@ -62,6 +62,19 @@ Click here to expand!
 
 ***
 
+## 📌 Order of Execution
+
+Sequence of how SQL runs the clauses:
+1. The SQL engine fetches the data from the tables (FROM and INNER JOIN)
+2. Filters it (WHERE)
+3. Aggregates the data (GROUP BY)
+4. Filters the aggregated data (HAVING)
+5. Selects the columns and expressions to display (SELECT)
+6. Orders the remaining data (ORDER BY)
+7. Limits the results (LIMIT/TO)
+
+For more explanation, check out [SQLBolt](https://sqlbolt.com/lesson/select_queries_order_of_execution).
+
 ## 📌 Table Design
 
 ### Create Table
