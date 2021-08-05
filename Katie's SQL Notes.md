@@ -90,10 +90,10 @@ CREATE TABLE rooms (
 ````sql
 INSERT INTO rooms (room_no, bed_type, rate)
 	VALUES ('101', 'King', 120),
-		('102, 'Queen', 100),
-		('103, 'Deluxe', 80),
-		('104, 'King', 120),
-		('105, 'Queen', 100);
+		('102', 'Queen', 100),
+		('103', 'Deluxe', 80),
+		('104', 'King', 120),
+		('105', 'Queen', 100);
 ````
 
 ### Delete Records
