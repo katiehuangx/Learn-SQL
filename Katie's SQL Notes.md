@@ -19,11 +19,12 @@ Click here to expand!
   - Drop table
 - Create index
   - Set primary key and foreign key
-- Alter table and column
+- Alter table
 - Data types	
   - Text
   - Numerical
   - Date time
+- Table constraints
 - Base query
 - Filter techniques
   - Using WHERE
@@ -121,6 +122,13 @@ SET checkin_date = '2021-05-10',
 WHERE reservation_id = 1001;
 ````
 
+````sql
+UPDATE movies
+SET title = "Toy Story 3", 
+	director = "Lee Unkrich"
+WHERE id = 11;
+````
+
 ### Remove Table
 
 Use `TRUNCATE TABLE` to remove all data from the table, however the table still exists in the database.
@@ -136,6 +144,31 @@ DROP TABLE rooms;
 ````
 
 ***
+
+## 📌 Alter Table
+
+### Add Columns
+
+````sql
+ALTER TABLE guests
+ADD last_name VARCHAR(15);
+````
+
+````sql
+ALTER TABLE movies
+  ADD COLUMN Language TEXT DEFAULT "English"; -- Set 'English' as the default values in all rows of Language column
+````
+
+### Remove Columns
+
+````sql
+ALTER TABLE guests
+RENAME TO guests_info;
+````
+
+### Rename Table
+
+**
 
 ## 📌 Index
 
@@ -161,10 +194,19 @@ ON guests (last_name); -- table name and column name
 
 ### Drop Index
 
-
 ***
 
 ## 📌 Data Types
+
+***
+
+## 📌 Table Constraints
+
+- Primary key
+- Foreign key
+- Auto-increment
+- Unique
+- NOT NULL
 
 ***
 
