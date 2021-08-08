@@ -479,7 +479,19 @@ GROUP BY IIF (SalesYTD > 2000000, 'Met sales goal', 'Has not met goal');
 
 ## 📌 Create Temp Table
 
+````sql
+DROP TABLE IF EXISTS clean_weight_logs;
+
+CREATE TEMP TABLE clean_weight_logs AS (
+SELECT *
+FROM health.user_logs
+WHERE measure = 'weight' 
+	AND measure_value > 0
+	AND measure_value < 201);
+````
+
 ***
+
 ## 📌 Subquery
 
 ### Subquery in SELECT
