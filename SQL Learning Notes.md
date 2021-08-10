@@ -1,4 +1,4 @@
-# 📝 Katie's SQL Notes
+# 📝 SQL Learning Notes
 
 Hi, I'm Katie! This is my work-in-progress notes on SQL. 
 
