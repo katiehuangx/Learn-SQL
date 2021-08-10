@@ -8,7 +8,11 @@ FYI, I have zero technical/programming background and have only began studying S
 
 I will be updating this regularly or as and when I can. 
 
-Also, do take note that different courses/websites may use different SQL 'flavours' such as PostgreSQL (most common!), Microsoft SQL Server (more commonly known as "SQL Server" or "MS SQL Server" and, it's also my personal favourite), MySQL, SQLite and more.
+Also, do take note that different courses/websites may use different SQL 'flavours' such as,
+- PostgreSQL (most common!)
+- Microsoft SQL Server (more commonly known as "SQL Server" or "MS SQL Server" and, also my personal favourite)
+- MySQL
+- SQLite and more
 
 ***
 ## 📚 LinkedIn Querying Microsoft SQL Server 2019 course 
