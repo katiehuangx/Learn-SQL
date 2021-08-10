@@ -11,7 +11,8 @@ I will be updating this regularly or as and when I can.
 Also, do take note that different courses/websites may use different SQL 'flavours' such as PostgreSQL (most common!), Microsoft SQL Server (more commonly known as "SQL Server" or "MS SQL Server" and, it's also my personal favourite), MySQL, SQLite and more.
 
 ***
-## 📚 LinkedIn Querying Microsoft SQL Server 2019 course (Beginner - Intermediate)
+## 📚 LinkedIn Querying Microsoft SQL Server 2019 course 
+***Link | Beginner - Intermediate | Paid***
 
 SQL flavour: Microsoft SQL Server
 
@@ -19,7 +20,8 @@ View my repo [here](https://github.com/katiehuangx/Learn-SQL/tree/main/LinkedIn%
 
 ***
 
-## 📚 SQL Bolt (Beginner)
+## 📚 SQL Bolt
+***[Link](https://sqlbolt.com) | Beginner | Free***
 
 SQL flavour: PostgreSQL
 
@@ -27,7 +29,8 @@ View my repo here.
 
 ***
 
-## 📚 Select Star
+## 📚 Select Star SQL
+***[Link](https://selectstarsql.com) | Beginner - Intermediate | Free***
 
 SQL flavour: SQLite
 
