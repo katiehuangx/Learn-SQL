@@ -2,13 +2,11 @@
 
 Hi, welcome to my SQL repo! 🙋🏻‍♀️
 
-During my process of learning SQL, I've taken multiple courses and perused many websites with SQL resources whereby I got to learn and also practice SQL questions. 
+During my learning process, I've taken multiple courses and perused many websites with SQL resources where I got to learn and practice SQL questions. 
 
 Then I thought, why not compile my solutions in a repository where I can refer to and study, so this is why I created this repo! 
 
 FYI, I have zero technical/programming background and have only began studying SQL in Jun 2021. 
-
-I will be updating this regularly or as and when I can. 
 
 Also, do take note that different courses/websites may use different SQL 'flavours' such as,
 - PostgreSQL (most common!)
