@@ -2,9 +2,9 @@
 
 Hi, welcome to my SQL repo! 🙋🏻‍♀️
 
-During my process of learning SQL, I've taken multiple courses and perused many websites with SQL resources whereby I got to learn and also, practice SQL questions. 
+During my process of learning SQL, I've taken multiple courses and perused many websites with SQL resources whereby I got to learn and also practice SQL questions. 
 
-Then I thought, instead of practicing and forgetting about them the next day, why not compile my solutions in a repository where I can refer to and study, so this is why I created this repo! 
+Then I thought, why not compile my solutions in a repository where I can refer to and study, so this is why I created this repo! 
 
 FYI, I have zero technical/programming background and have only began studying SQL in Jun 2021. 
 
