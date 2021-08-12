@@ -1,6 +1,6 @@
 # 📝 SQL Learning Notes
 
-Hi, I'm Katie! This is my work-in-progress notes on SQL. 
+Hi, I'm Katie! This is my work-in-progress notes on SQL - so you'll find some empty spaces or NULL values 😉 as I'm updating the notes as I learn. 
 
 ## 📚 Table of Content
 
