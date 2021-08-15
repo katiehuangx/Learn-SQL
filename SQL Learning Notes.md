@@ -401,9 +401,12 @@ HAVING City = 'New York'
 | TRIM()            | Trim blank spaces in a value            | SELECT TRIM(col_1) | 
 | LEFT(,3)         | Return 1st 3 characters from the left    | SELECT LEFT(col_1,3) |
 | RIGHT(,3)        | Returns 1st 3 characters from the right  | SELECT RIGHT(col_1,3) |
+| SUBSTRING(col,3,3) | To retrieve midsection of string        | SELECT SUBSTRING(col_1,10,10) |
 | CONCAT()          | Combine >= 2 values with ' ',-,/          | SELECT CONCAT(col_1, ' ', col_2, ' ', col_3) |
-| CONCAT_WS()       | To insert ' ' (blank space) between all values     | SELECT CONCAT_WS(' ', col_1, col_2, col_3)
-| CHARINDEX(' ',col) | To find location of character in string        | SELECT CHARINDEX('-', col_1)
+| CONCAT_WS()       | To insert ' ' (blank space) between all values     | SELECT CONCAT_WS(' ', col_1, col_2, col_3) |
+| CHARINDEX(' ',col) | To find location of character in string        | SELECT CHARINDEX('-', col_1) |
+| TOP(5) REPLACE(col,' ', ' ') | TOP specifies the rows being replaced and REPLACE replaces 1st '' with 2nd ' ' | SELECT TOP(5) REPLACE(col_1, '_', '-') |
+
 
 Refer to examples below.
 
