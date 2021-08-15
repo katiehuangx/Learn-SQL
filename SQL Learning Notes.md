@@ -393,16 +393,17 @@ HAVING City = 'New York'
 
 ### String Functions
 
-| String Functions  | Description                 |
-| ----------------- | --------------------------- |
-| UPPER()           | Convert 'NaMe' into UPPERCAESE  |
-| LOWER()           | Convert 'NaMe' into lowercase   |
-| LEN()             | Count number of characters in a value                            |
-| TRIM()            | Trim blank spaces in a value            |
-| LEFT(,3)         | Return 1st 3 characters from the left            |
-| RIGHT(,3)        | Returns 1st 3 characters from the right           |
-| CONCAT()          | Combine 2 or more values          |
-| CONCAT_WS()       | To insert ' ' (blank space/-) between all values          |
+| String Functions  | Description                 | Syntax | 
+| ----------------- | --------------------------- | ------- |
+| UPPER()           | Convert 'NaMe' into UPPERCAESE  | SELECT UPPER(col_1) |
+| LOWER()           | Convert 'NaMe' into lowercase   | SELECT LOWER(col_1) |
+| LEN()             | Count number of characters in a value   | SELECT LEN(col_1) |
+| TRIM()            | Trim blank spaces in a value            | SELECT TRIM(col_1) | 
+| LEFT(,3)         | Return 1st 3 characters from the left    | SELECT LEFT(col_1,3) |
+| RIGHT(,3)        | Returns 1st 3 characters from the right  | SELECT RIGHT(col_1,3) |
+| CONCAT()          | Combine >= 2 values with ' ',-,/          | SELECT CONCAT(col_1, ' ', col_2, ' ', col_3) |
+| CONCAT_WS()       | To insert ' ' (blank space) between all values     | SELECT CONCAT_WS(' ', col_1, col_2, col_3)
+| CHARINDEX(' ',col) | To find location of character in string        | SELECT CHARINDEX('-', col_1)
 
 Refer to examples below.
 
