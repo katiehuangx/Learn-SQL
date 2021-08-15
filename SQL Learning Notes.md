@@ -426,6 +426,16 @@ SELECT FirstName, LastName,
 FROM Person.Person;
 ````
 
+````sql
+SELECT 
+	TOP 10 description, 
+  CHARINDEX('Weather', description) AS start_of_string, -- Find index of 'Weather' which is 8
+  LEN('Weather') AS length_of_string, -- Find length of 'Weather'
+  SUBSTRING(description, 15, LEN(description)) AS additional_description -- Get substring between index 15 (after 'Weather') to end of description column
+FROM grid
+WHERE description LIKE '%Weather%';
+````
+
 ### Mathematical Functions
 
 | Mathematical Functions  | Description                 |
