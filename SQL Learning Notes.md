@@ -11,7 +11,7 @@ Click here to expand!
 </summary>
 
 ## Content
-	
+
 - Create and manage table
   - Insert records
   - Update table
@@ -66,53 +66,44 @@ Click here to expand!
 ## 📌 Order of Execution
 
 Sequence of how SQL runs the clauses:
-1. The SQL engine fetches the data from the tables (FROM and INNER JOIN)
-2. Filters it (WHERE)
-3. Aggregates the data (GROUP BY)
-4. Filters the aggregated data (HAVING)
-5. Selects the columns and expressions to display (SELECT)
-6. Orders the remaining data (ORDER BY)
-7. Limits the results (LIMIT/TO)
 
-For more explanation, check out [SQLBolt](https://sqlbolt.com/lesson/select_queries_order_of_execution).
+1. FROM, JOINS - The SQL engine fetches the data from the tables
+2. WHERE - Filters it
+3. GROUP BY - Aggregates data and can remove duplicates
+4. HAVING - Filters aggregated data
+5. SELECT - Selects the columns and expressions to display
+6. DISTINCT - Remove duplicates
+7. UNION, INTERSECT, EXCEPT - Can remove duplicates. UNION ALL include duplicates
+8. ORDER BY - Orders the remaining data
+9. OFFSET, LIMIT - Limits the results
 
 ## 📌 Table Design
 
+### CRUD Operations
+
+- **CREATE** - Create databases, tables or views
+- **READ** - Read using SELECT clause
+- **UPDATE** - Amend existing database records
+- **DELETE** - Delete records
+
 ### Create Table
+
 ````sql
 CREATE TABLE rooms (
-	room_id INT IDENTITY(1,1) NOT NULL, -- room_id is auto-incremental value
+	room_id INT IDENTITY(1,1) NOT NULL, -- IDENTITY(1,1) means room_id is an identity key that auto-increments by 1
 	room_no CHAR(3) NOT NULL,
 	bed_type VARCHAR(15) NOT NULL,
 	rate SMALLMONEY NOT NULL);
 ````
 
-### Insert Records
-````sql
-INSERT INTO rooms (room_no, bed_type, rate)
-	VALUES ('101', 'King', 120),
-		('102', 'Queen', 100),
-		('103', 'Deluxe', 80),
-		('104', 'King', 120),
-		('105', 'Queen', 100);
-````
-
-### Delete Records
-
-Before running `DELETE` clause, run a query to identify the exact row(s) for deletion to ensure that we delete only the unwanted rows.
-
-````sql
-DELETE FROM guests
-WHERE customer_id = 1005;
-````
 ### Update Records
 
-Before running `UPDATE` clause, run a query to identify the exact row(s) to update to ensure that we update correct rows.
+Before running `UPDATE` clause, run a `SELECT` query to identify the exact row(s) to update to ensure that we update correct rows.
 
 ````sql
 UPDATE guests
 SET checkin_date = '2021-05-10'
-WHERE reservation_id = 1001;
+WHERE reservation_id = 1001; - a condition to identify the specific rows to update
 ````
 
 ````sql
@@ -129,15 +120,45 @@ SET title = "Toy Story 3",
 WHERE id = 11;
 ````
 
+### Delete Records
+
+Before running `DELETE` clause, run a `SELECT` query to identify the exact row(s) for deletion to ensure that we delete only the unwanted rows.
+
+````sql
+DELETE FROM guests
+WHERE customer_id = 1005;
+````
+
+### Insert Records
+
+````sql
+INSERT INTO rooms (room_no, bed_type, rate)
+	VALUES ('101', 'King', 120),
+		('102', 'Queen', 100),
+		('103', 'Deluxe', 80),
+		('104', 'King', 120),
+		('105', 'Queen', 100);
+````
+
+````sql
+INSERT INTO rooms (room_no, bed_type, rate)
+SELECT
+  col_1,
+  col_2,
+  col_3
+FROM other_table
+WHERE --conditions apply
+````
+
 ### Remove Table
 
-Use `TRUNCATE TABLE` to remove all data from the table, however the table still exists in the database.
+Use `TRUNCATE TABLE` to remove all data from the table with table structure still exists in the database.
 
 ````sql
 TRUNCATE TABLE rooms;
 ````
 
-Use `DROP TABLE` to delete the entire table from the database.
+Use `DROP TABLE` to delete the entire table including data from the database.
 
 ````sql
 DROP TABLE rooms;
@@ -197,6 +218,9 @@ ON guests (last_name); -- table name and column name
 ***
 
 ## 📌 Data Types
+
+
+
 
 ***
 
@@ -577,6 +601,21 @@ PIVOT (AVG(ListPrice) FOR ProductLine IN (M, R, S, T)) AS PivotTable; -- For eve
 
 ## 📌 Create and Use Variables
 
+Use Variables to avoid repetition of creating different queries using same variable. 
+
+For example, having to create different queries to find for specific artists. Instead, we assign/declare placeholder `=@my_artist`. All we need to do is update the variable each time we run the query.
+
+Syntax example:
+````sql
+-- To declare a variable
+DECLARE @col_1 INT
+DECLARE @my_name VARCHAR(100)
+
+-- To assign value to variable
+SET @col_1 = 5
+SET @my_name = 'Katie'
+````
+
 ### Using DECLARE
 
 ````sql
@@ -624,15 +663,25 @@ END;
 
 ## 📌 Result set operators
 
+
+
 ### Combine results with UNION
 
+`UNION` excludes duplicate rows in both set of queries whereas, `UNION ALL` includes any duplicate rows in the sets of queries.
+
+To use `UNION` or `UNION ALL`, when combining data from different tables
+- Select same number of columns in same order
+- Columns should have same data type
+
 ````sql
-SELECT ProductCategoryID, NULL AS ProductSubCategoryID, Name -- Create an empty column to represent ProductSubCategoryID column from 2nd table. Both table data types must be same.
+SELECT ProductCategoryID, NULL AS ProductSubCategoryID, Name
+-- Create an empty column to represent ProductSubCategoryID column from 2nd table. Both table data types must be same.
 FROM Production.ProductCategory
 UNION
 SELECT ProductCategoryID, ProductSubCategoryID, Name
 FROM Production.ProductSubcategory;
 ````
+
 
 ### Return distinct rows with EXCEPT
 
