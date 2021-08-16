@@ -258,6 +258,14 @@ SELECT DISTINCT City, StateProvinceID
 FROM Person.Address
 ORDER BY City;
 ````
+### Using ISNUMERIC()
+
+To return values that are numeric only.
+
+````sql
+SELECT ISNUMERIC(student_score)
+FROM School.Scores;
+````
 
 ### Comparison operators
 
@@ -438,12 +446,13 @@ WHERE description LIKE '%Weather%';
 
 ### Mathematical Functions
 
-| Mathematical Functions  | Description                 |
-| ----------------- | --------------------------- |
-| ROUND(,2)           | Round with 2 decimals  |
-| ROUND(,-2           | Round up to nearest hundreds   |
-| CEILING()           | Round up to nearest integer                           |
-| FLOOR()            | Round down to nearest integer            |
+| Mathematical Functions  | Description        | Syntax |
+| ----------------- | ------------------------ | ------ |
+| ROUND(,2)           | Round with 2 decimals  | ROUND(col_1, 2) |
+| ROUND(,-2)           | Round up to nearest hundreds   | ROUND(col_1, -2) |
+| CEILING()           | Round up to nearest integer     | CEILING(col_1) |
+| FLOOR()            | Round down to nearest integer    | FLOOR(col_1)
+
 
 ````sql
 SELECT BusinessEntityID, SalesYTD,
