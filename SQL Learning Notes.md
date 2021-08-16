@@ -4,7 +4,6 @@ Hi, I'm Katie! This is my work-in-progress notes on SQL - so you'll find some em
 
 ## 📚 Table of Content
 
-
 <details>
 <summary>
 Click here to expand!
@@ -12,19 +11,16 @@ Click here to expand!
 
 ## Content
 
-- Create and manage table
-  - Insert records
-  - Update table
-  - Truncate table
-  - Drop table
+- CRUD Operations
+- Insert records
+- Alter table
+- Table constraints
 - Create index
   - Set primary key and foreign key
-- Alter table
 - Data types	
   - Text
   - Numerical
   - Date time
-- Table constraints
 - Base query
 - Filter techniques
   - Using WHERE
@@ -177,27 +173,38 @@ ADD last_name VARCHAR(15);
 
 ````sql
 ALTER TABLE movies
-  ADD COLUMN Language TEXT DEFAULT "English"; -- Set 'English' as the default values in all rows of Language column
+  ADD COLUMN Language TEXT DEFAULT "English"; -- Set 'English' as the default values in all rows in Language column
 ````
 
-### Remove Columns
+### Remove/Drop Columns
 
 ````sql
-ALTER TABLE guests
-RENAME TO guests_info;
+ALTER TABLE table_name
+DROP COLUMN old_column;
 ````
 
 ### Rename Table
 
-**
+````sql
+ALTER TABLE table_name
+RENAME COLUMN old_column TO new_column;
+````
+***
 
-## 📌 Index
+## 📌 Table Constraints
 
-Index improves the speed of looking through the table's data. Without an index, SQL performs a table scan by searching for every record in the table. 
+Constraints give the data structure and help with consistency and data quality.
 
-It acts as 'Table of Content' in a book - it's (usually) much faster to look up something in a book by looking at its index than by flipping every page until we find what we want.
+**Integrity Constrains**
+1. Attribute constraints - Eg. data types on columns
+2. Key constraints - Primary keys
+3. Referential integrity constraints - Enforced through foreign keys
 
-### Create Index
+- Primary key
+- Foreign key
+- Auto-increment
+- Unique
+- NOT NULL
 
 **Create Primary Key**
 
@@ -213,28 +220,21 @@ CREATE NONCLUSTERED INDEX IX_guests_last_name -- Name of your index
 ON guests (last_name); -- table name and column name
 ````
 
+***
+
+## 📌 Index
+
+Index improves the speed of looking through the table's data. Without an index, SQL performs a table scan by searching for every record in the table. 
+
+It acts as 'Table of Content' in a book - it's (usually) much faster to look up something in a book by looking at its index than by flipping every page until we find what we want.
+
+### Create Index
+
 ### Drop Index
 
 ***
 
 ## 📌 Data Types
-
-
-
-
-***
-
-## 📌 Table Constraints
-
-- Primary key
-- Foreign key
-- Auto-increment
-- Unique
-- NOT NULL
-
-***
-
-## 📌 Basics
 
 ***
 
