@@ -321,6 +321,10 @@ WHERE first_name LIKE 'a[c-e]__' -- Finds any values that starts with "a" and ha
 
 ## 📌 JOINS
 
+- `INNER JOIN`: Only returns matching rows.
+- `LEFT JOIN` (or `RIGHT JOIN`): All rows from main table + matches from joining table.
+- `NULL`: Displayed if no match is found in `LEFT JOIN` / `RIGHT JOIN`.
+
 ### Inner Joins
 
 ````sql
