@@ -1,6 +1,6 @@
 # 📝 SQL Learning Notes
 
-Hi, I'm Katie! This is my work-in-progress notes on SQL - so you'll find some empty spaces or NULL values 😉 as I'm updating the notes as I learn. 
+Hi, this is my work-in-progress notes on SQL.
 
 ## 📚 Table of Content
 
@@ -14,25 +14,27 @@ Click here to expand!
 1. Order of Execution
 2. CRUD Operations
 3. Relational Database
-	- Create, Update, Alter Table
-  - Insert Values
-  - Table Constraints
-  - Create Index
+    - Create, Update, Alter Table
+    - Insert Values
+    - Table Constraints
+    - Create Index
 4. Data Types	
 5. Base query
 6. Filtering Techniques
 7. Grouping Records
-8. Built-in Functions
-9. Joining Tables
-  - INNER JOIN, LEFT JOIN, RIGHT JOIN, OUTER JOIN, CROSS JOIN, ANTI JOIN
-  - UNION, UNION ALL, EXCEPT, INTERSECT  
-10. Window Functions
-11. Condition Statement
-12. Create Temporary Table
-13. Common Table Expressions (CTE)  
-14. Subquery
-15. PIVOT
-16. Declare Variables
+8. Joining Tables
+    - INNER JOIN, LEFT JOIN, RIGHT JOIN, OUTER JOIN, CROSS JOIN, ANTI JOIN
+    - UNION, UNION ALL, EXCEPT, INTERSECT  
+9. Built-in Functions
+10. Aggregations
+    - Summary Sta
+11. Window Functions
+12. Condition Statement
+13. Create Temporary Table
+14. Common Table Expressions (CTE)  
+15. Subquery
+16. PIVOT
+17. Declare Variables
  
 </details>
 
@@ -63,7 +65,7 @@ Sequence of how SQL runs the query:
 
 ````sql
 CREATE TABLE rooms (
-	room_id INT IDENTITY(1,1) NOT NULL, -- IDENTITY(1,1) means room_id is an identity key that auto-increments by 1
+	room_id INT IDENTITY(1,1) NOT NULL, -- IDENTITY(1,1) meaning room_id is an identity key that auto-increments by 1
 	room_no CHAR(3) NOT NULL,
 	bed_type VARCHAR(15) NOT NULL,
 	rate SMALLMONEY NOT NULL);
@@ -522,7 +524,6 @@ UNION
 SELECT ProductCategoryID, ProductSubCategoryID, Name
 FROM Production.ProductSubcategory;
 ````
-
 
 ### Return distinct rows with EXCEPT
 
