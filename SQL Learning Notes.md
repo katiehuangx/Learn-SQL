@@ -273,7 +273,9 @@ ADD CONSTRAINT professors_fkey FOREIGN KEY (university_id) REFERENCES universiti
 UPDATE table_a
 SET column_to_update = table_b.column_to_update_from
 FROM table_b
-WHERE condition1 AND condition2 AND ...;
+WHERE condition1 
+  AND condition2 
+  AND ...;
 ````
 
 For example,
@@ -290,7 +292,10 @@ WHERE affiliations.firstname = professors.firstname
 Take note that we cannot use `!=` or `<>` on NULL values.
 
 ````sql
-SELECT WorkOrderID, ScrappedQty, ScrapReasonID
+SELECT 
+  WorkOrderID, 
+  ScrappedQty, 
+  ScrapReasonID
 FROM Production.WorkOrder
 WHERE ScrapReasonID IS NOT NULL;
 ````
@@ -299,7 +304,10 @@ WHERE ScrapReasonID IS NOT NULL;
 
 For example, replace NULL values with '99'.
 ````sql
-SELECT WorkOrderID, ScrappedQty, ISNULL(ScrapReasonID, 99) AS ScrapReason
+SELECT 
+  WorkOrderID, 
+  ScrappedQty, 
+  ISNULL(ScrapReasonID, 99) AS ScrapReason
 FROM Production.WorkOrder;
 ````
 
@@ -352,7 +360,8 @@ FROM transactions;
 
 **Limit results with TOP**
 ````sql
-SELECT TOP 3 TaxRate
+SELECT 
+  TOP 3 TaxRate
 FROM Sales.SalesTaxRate
 ORDER BY TaxRate DESC;
 ````
@@ -362,7 +371,9 @@ ORDER BY TaxRate DESC;
 Specify the number of percentage of results to generate. For example, to generate the first 50% of the results, use `TOP 50 PERCENT`. 
 
 ````sql
-SELECT TOP 50 PERCENT TaxRate, Name
+SELECT 
+  TOP 50 PERCENT TaxRate, 
+  Name
 FROM Sales.SalesTaxRate
 ORDER BY TaxRate DESC;
 ````
@@ -374,7 +385,9 @@ Results include multiple records of the same values from the last record.
 For example, we are interested to know the Top 5 students in the classroom. Since there are 2 students who have received the same 5th highest score in the classroom, hence there will be a total of 6 rows of records in the results table - 1, 2, 3, 4, 5, 5.
 
 ````sql
-SELECT TOP 5 WITH TIES student_name, score
+SELECT 
+  TOP 5 WITH TIES student_name, 
+  score
 FROM classroom
 ORDER BY score;
 ````
@@ -384,7 +397,9 @@ ORDER BY score;
 To remove duplicates and retrieve unique values only.
 
 ````sql
-SELECT DISTINCT City, StateProvinceID
+SELECT 
+  DISTINCT City, 
+  StateProvinceID
 FROM Person.Address
 ORDER BY City;
 ````
@@ -414,8 +429,6 @@ FROM School.Scores;
 | IN (..., ..., ...)    |    |
 | NOT IN (..., ..., ...)  | |
 
-
-
 ### Match texts using LIKE and Wildcards**
 
 ````sql
@@ -443,7 +456,11 @@ WHERE first_name LIKE 'a[c-e]__' -- Finds any values that starts with "a" and ha
 ### Inner Joins
 
 ````sql
-SELECT p.BusinessEntityID, p.FirstName, p.LastName, pp.PhoneNumber
+SELECT 
+  p.BusinessEntityID, 
+  p.FirstName, 
+  p.LastName, 
+  pp.PhoneNumber
 FROM Person.Person AS p
 JOIN Person.PersonPhone AS pp
 	ON p.BusinessEntityID = pp.BusinessEntityID;
@@ -452,7 +469,12 @@ JOIN Person.PersonPhone AS pp
 ### Left Joins
 
 ````sql
-SELECT p.BusinessEntityID, p.PersonType, p.FirstName, p.LastName, e.JobTitle
+SELECT 
+  p.BusinessEntityID, 
+  p.PersonType, 
+  p.FirstName, 
+  p.LastName, 
+  e.JobTitle
 FROM Person.Person AS p
 LEFT JOIN HumanResources.Employee AS e
 	ON p.BusinessEntityID = e.BusinessEntityID;
@@ -461,7 +483,12 @@ LEFT JOIN HumanResources.Employee AS e
 ### Right Joins
 
 ````sql
-SELECT p.BusinessEntityID, p.PersonType, p.FirstName, p.LastName, e.JobTitle
+SELECT 
+  p.BusinessEntityID, 
+  p.PersonType, 
+  p.FirstName, 
+  p.LastName, 
+  e.JobTitle
 FROM Person.Person AS p
 RIGHT JOIN HumanResources.Employee AS e
 	ON p.BusinessEntityID = e.BusinessEntityID;
@@ -472,9 +499,69 @@ RIGHT JOIN HumanResources.Employee AS e
 For example, table_1 has 10 rows and table_2 has 5 rows. A `CROSS JOIN` would result in 10 rows x 5 rows = 50 rows table.
 
 ````sql
-SELECT d.Name AS DepartmentName, a.Name AS AddressName
+SELECT 
+  d.Name AS DepartmentName, 
+  a.Name AS AddressName
 FROM HumanResources.Department AS d
 CROSS JOIN Person.AddressType AS a;
+````
+
+### Combine results with UNION
+
+`UNION` excludes duplicate rows in both set of queries whereas, `UNION ALL` includes any duplicate rows in the sets of queries.
+
+To use `UNION` or `UNION ALL`, when combining data from different tables
+- Select same number of columns in same order
+- Columns should have same data type
+
+````sql
+SELECT ProductCategoryID, NULL AS ProductSubCategoryID, Name
+-- Create an empty column to represent ProductSubCategoryID column from 2nd table. Both table data types must be same.
+FROM Production.ProductCategory
+UNION
+SELECT ProductCategoryID, ProductSubCategoryID, Name
+FROM Production.ProductSubcategory;
+````
+
+
+### Return distinct rows with EXCEPT
+
+````sql
+SELECT BusinessEntityID
+FROM Person.Person
+WHERE PersonType <> 'EM' -- Select everyone who is not an employee
+EXCEPT
+SELECT BusinessEntityID
+FROM Sales.PersonCreditCard; -- Everyone with credit card
+````
+
+You can achieve the same results as above using a `LEFT JOIN` below.
+
+````sql
+SELECT p.BusinessEntityID
+FROM Person.Person AS p
+LEFT JOIN Sales.PersonCreditCard AS c --Same results using LEFT JOIN
+	ON p.BusinessEntityID = c.BusinessEntityID
+WHERE p.PersonType <> 'EM' AND c.CreditCardID IS NULL;
+````
+
+### Return common rows with INTERSECT
+
+````sql
+SELECT ProductID
+FROM Production.ProductProductPhoto
+INTERSECT
+SELECT ProductID
+FROM Production.ProductReview;
+````
+
+You can achieve the same results as above using `JOIN` below.
+
+````sql
+SELECT DISTINCT(p.ProductID) -- Same results using JOIN
+FROM Production.ProductProductPhoto AS p
+JOIN Production.ProductReview AS r
+	ON p.ProductID = r.ProductID;
 ````
 
 ***
@@ -486,7 +573,10 @@ CROSS JOIN Person.AddressType AS a;
 Every column in `GROUP BY` clause needs to be in `SELECT` clause.
 
 ````sql
-SELECT City, StateProvinceID, COUNT(*) AS AddressCount
+SELECT 
+  City, 
+  StateProvinceID, 
+  COUNT(*) AS AddressCount
 FROM Person.Address
 GROUP BY City, StateProvinceID
 ORDER BY AddressCount DESC;
@@ -497,7 +587,10 @@ ORDER BY AddressCount DESC;
 `HAVING` must be used in conjuction with `GROUP BY`.
 
 ````sql
-SELECT City, StateProvinceID, COUNT(*) AS AddressCount
+SELECT 
+  City, 
+  StateProvinceID, 
+  COUNT(*) AS AddressCount
 FROM Person.Address
 GROUP BY City, StateProvinceID
 HAVING City = 'New York'
@@ -538,7 +631,9 @@ HAVING City = 'New York'
 Refer to examples below.
 
 ````sql
-SELECT FirstName, LastName, 
+SELECT 
+  FirstName, 
+  LastName, 
 	UPPER(FirstName) AS FName, LOWER(LastName) AS LName, 
 	LEN(FirstName) AS LenFName,
 	LEFT(LastName, 3) AS First3, RIGHT(LastName,3) AS Last3,
@@ -547,7 +642,9 @@ FROM Person.Person;
 ````
 
 ````sql
-SELECT FirstName, LastName,
+SELECT 
+  FirstName, 
+  LastName,
 	CONCAT(FirstName, ' ', MiddleName, ' ', LastName) AS FullName,
 	CONCAT_WS(' ', FirstName, MiddleName, LastName) AS FullNameWS -- 'WS' stands for 'With Separator'
 FROM Person.Person;
@@ -574,7 +671,9 @@ WHERE description LIKE '%Weather%';
 
 
 ````sql
-SELECT BusinessEntityID, SalesYTD,
+SELECT 
+  BusinessEntityID, 
+  SalesYTD,
 	ROUND(SalesYTD, 2) AS Round2, -- 2 decimals
 	ROUND(SalesYTD, -2) AS Round100, -- Round up to nearest hundreds
 	CEILING(SalesYTD) AS RoundCeiling, -- Round up to nearest integer
@@ -607,7 +706,8 @@ FROM Sales.SalesPerson;
 ### IIF 
 
 ````sql
-SELECT IIF (SalesYTD > 2000000, 'Met sales goal', 'Has not met goal') AS Status,
+SELECT 
+  IIF (SalesYTD > 2000000, 'Met sales goal', 'Has not met goal') AS Status,
 	COUNT(*)
 FROM Sales.SalesPerson
 GROUP BY IIF (SalesYTD > 2000000, 'Met sales goal', 'Has not met goal');
@@ -623,7 +723,6 @@ GROUP BY IIF (SalesYTD > 2000000, 'Met sales goal', 'Has not met goal');
 
 ````sql
 DROP TABLE IF EXISTS clean_weight_logs;
-
 CREATE TEMP TABLE clean_weight_logs AS (
 SELECT *
 FROM health.user_logs
@@ -638,23 +737,28 @@ WHERE measure = 'weight'
 
 ### Subquery in SELECT
 ````sql
-SELECT BusinessEntityID, SalesYTD, 
-	(SELECT MAX(SalesYTD) 
-	FROM Sales.SalesPerson) AS HighestSalesYTD,
-	(SELECT MAX(SalesYTD) 
-	FROM Sales.SalesPerson) - SalesYTD AS SalesGap
+SELECT 
+  BusinessEntityID, 
+  SalesYTD, 
+	  (SELECT MAX(SalesYTD) 
+	  FROM Sales.SalesPerson) AS HighestSalesYTD,
+	  (SELECT MAX(SalesYTD) 
+	  FROM Sales.SalesPerson) - SalesYTD AS SalesGap
 FROM Sales.SalesPerson
 ORDER BY SalesYTD DESC
 ````
 
 ### Subquery in HAVING
 ````sql
-SELECT SalesOrderID, SUM(LineTotal) AS OrderTotal
+SELECT 
+  SalesOrderID, 
+  SUM(LineTotal) AS OrderTotal
 FROM Sales.SalesOrderDetail
 GROUP BY SalesOrderID
 HAVING SUM(LineTotal) > 
 	(
-	SELECT AVG(ResultTable.MyValues) AS AvgValue -- subsquery no. 2. Cannot combine both subqueries as cannot do AVG(SUM(LineTotal))
+	SELECT 
+    AVG(ResultTable.MyValues) AS AvgValue -- subsquery no. 2. Cannot combine both subqueries as cannot do AVG(SUM(LineTotal))
 	FROM
 		(SELECT SUM(LineTotal) AS MyValues --subquery no. 1
 		FROM Sales.SalesOrderDetail
@@ -665,12 +769,17 @@ HAVING SUM(LineTotal) >
 ### Correlated Subquery
 
 ````sql
-SELECT BusinessEntityID, FirstName, LastName,
-	(SELECT JobTitle
-	FROM HumanResources.Employee
-	WHERE BusinessEntityID = MyPeople.BusinessEntityID) AS JobTitle --Better to use LEFT JOIN as give same results
+SELECT 
+  BusinessEntityID, 
+  FirstName, 
+  LastName,
+	  (SELECT 
+      JobTitle
+	  FROM HumanResources.Employee
+	  WHERE BusinessEntityID = MyPeople.BusinessEntityID) AS JobTitle --Better to use LEFT JOIN as give same results
 FROM Person.Person AS MyPeople
-WHERE EXISTS (SELECT JobTitle
+WHERE EXISTS 
+  (SELECT JobTitle
 		FROM HumanResources.Employee
 		WHERE BusinessEntityID = MyPeople.BusinessEntityID); -- Better to use JOIN or WHERE EXISTS
 
@@ -681,11 +790,14 @@ WHERE EXISTS (SELECT JobTitle
 ## 📌 PIVOT
 
 ````sql
-SELECT 'AverageListPrice' AS 'ProductLine', -- To add meaning to the table
+SELECT 
+  'AverageListPrice' AS 'ProductLine', -- To add meaning to the table
 FROM
-	(SELECT ProductLine, ListPrice
+	(SELECT 
+    ProductLine, 
+    ListPrice
 	FROM Production.Product) AS SourceData
-PIVOT (AVG(ListPrice) FOR ProductLine IN (M, R, S, T)) AS PivotTable; -- For every product line M, R, S, T we are going to find the average price
+  PIVOT (AVG(ListPrice) FOR ProductLine IN (M, R, S, T)) AS PivotTable; -- For every product line M, R, S, T we are going to find the average price
 ````
 
 ***
@@ -749,68 +861,5 @@ BEGIN
 	SET @Counter = @Counter + 1
 	SET @Product = @Product + 10
 END;
-````
-***
-
-## 📌 Result set operators
-
-
-
-### Combine results with UNION
-
-`UNION` excludes duplicate rows in both set of queries whereas, `UNION ALL` includes any duplicate rows in the sets of queries.
-
-To use `UNION` or `UNION ALL`, when combining data from different tables
-- Select same number of columns in same order
-- Columns should have same data type
-
-````sql
-SELECT ProductCategoryID, NULL AS ProductSubCategoryID, Name
--- Create an empty column to represent ProductSubCategoryID column from 2nd table. Both table data types must be same.
-FROM Production.ProductCategory
-UNION
-SELECT ProductCategoryID, ProductSubCategoryID, Name
-FROM Production.ProductSubcategory;
-````
-
-
-### Return distinct rows with EXCEPT
-
-````sql
-SELECT BusinessEntityID
-FROM Person.Person
-WHERE PersonType <> 'EM' -- Select everyone who is not an employee
-EXCEPT
-SELECT BusinessEntityID
-FROM Sales.PersonCreditCard; -- Everyone with credit card
-````
-
-You can achieve the same results as above using a `LEFT JOIN` below.
-
-````sql
-SELECT p.BusinessEntityID
-FROM Person.Person AS p
-LEFT JOIN Sales.PersonCreditCard AS c --Same results using LEFT JOIN
-	ON p.BusinessEntityID = c.BusinessEntityID
-WHERE p.PersonType <> 'EM' AND c.CreditCardID IS NULL;
-````
-
-### Return common rows with INTERSECT
-
-````sql
-SELECT ProductID
-FROM Production.ProductProductPhoto
-INTERSECT
-SELECT ProductID
-FROM Production.ProductReview;
-````
-
-You can achieve the same results as above using `JOIN` below.
-
-````sql
-SELECT DISTINCT(p.ProductID) -- Same results using JOIN
-FROM Production.ProductProductPhoto AS p
-JOIN Production.ProductReview AS r
-	ON p.ProductID = r.ProductID;
 ````
 ***
