@@ -70,6 +70,15 @@ CREATE TABLE rooms (
 	rate SMALLMONEY NOT NULL);
 ````
 
+````sql
+CRREATE TABLE students (
+  ssn INTEGER NOT NULL, -- only contains whole numbers
+  name VARCHAR(64),
+  dob DATE,
+  average_grade NUMERIC (3,2), -- precision of 3 and scale of 2 meaning, eg. 100.00
+  tuition_paid BOOLEAN);
+````
+
 ### Update Records
 
 Before running `UPDATE` clause, run a `SELECT` query to identify the exact row(s) to update to ensure that we update correct rows.
@@ -151,7 +160,24 @@ ADD last_name VARCHAR(15);
 
 ````sql
 ALTER TABLE movies
-  ADD COLUMN Language TEXT DEFAULT "English"; -- Set 'English' as the default values in all rows in Language column
+ADD COLUMN Language 
+TEXT DEFAULT "English"; -- Set 'English' as the default values in all rows in Language column
+````
+
+### Change Type
+_Note: Functions below are for PostgreSQL_
+
+````sql
+ALTER TABLE name
+ALTER COLUMN name
+TYPE VARCHAR(128);
+````
+
+````sql
+ALTER TABLE student
+ALTER COLUMN average_grade -- eg. original output is 98.68
+TYPE integer -- Alter to integer output, eg. 98 (normally, will round down)
+USING ROUND(average_grade); -- Round up integer instead to, eg. 99
 ````
 
 ### Remove/Drop Columns
@@ -184,6 +210,25 @@ Constraints give the data structure and help with consistency and data quality.
 - Unique
 - NOT NULL
 
+### NULL Values
+
+Take note that we cannot use `!=` or `<>` on NULL values.
+
+````sql
+SELECT WorkOrderID, ScrappedQty, ScrapReasonID
+FROM Production.WorkOrder
+WHERE ScrapReasonID IS NOT NULL;
+````
+
+**ISNULL**
+
+For example, replace NULL values with '99'.
+````sql
+SELECT WorkOrderID, ScrappedQty, ISNULL(ScrapReasonID, 99) AS ScrapReason
+FROM Production.WorkOrder;
+````
+
+
 **Create Primary Key**
 
 ````sql
@@ -213,6 +258,29 @@ It acts as 'Table of Content' in a book - it's (usually) much faster to look up 
 ***
 
 ## 📌 Data Types
+
+- text - character strings of any length
+- varchar(x) - a maximum of 'x' characters
+- char(x) - a fixed-length string of 'x' characters
+- boolean - True(1) , False(0) or NULL
+- date, time, timestamps - date, datetime, timezone
+- numeric - float, decimal
+- integer - whole numbers
+
+### Use CAST to other data types 
+
+````sql
+SELECT 
+	CAST(some_column AS integer)
+FROM table;
+````
+
+````sql
+SELECT 
+  transaction_date, 
+  (amount + CAST(fee AS integer)) AS net_amount 
+FROM transactions;
+````
 
 ***
 
@@ -285,23 +353,7 @@ FROM School.Scores;
 | IN (..., ..., ...)    |    |
 | NOT IN (..., ..., ...)  | |
 
-### NULL Values
 
-Take note that we cannot use `!=` or `<>` on NULL values.
-
-````sql
-SELECT WorkOrderID, ScrappedQty, ScrapReasonID
-FROM Production.WorkOrder
-WHERE ScrapReasonID IS NOT NULL;
-````
-
-**ISNULL**
-
-For example, replace NULL values with '99'.
-````sql
-SELECT WorkOrderID, ScrappedQty, ISNULL(ScrapReasonID, 99) AS ScrapReason
-FROM Production.WorkOrder;
-````
 
 ### Match texts using LIKE and Wildcards**
 
