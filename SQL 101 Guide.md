@@ -1,6 +1,4 @@
-# 📝 SQL Learning Notes
-
-Hi, this is my work-in-progress notes on SQL.
+# 📝 SQL 101 Guide
 
 ## 📚 Table of Content
 
