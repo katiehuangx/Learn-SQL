@@ -218,11 +218,9 @@ Constraints give the data structure and help with consistency and data quality.
 
 **Integrity Constrains**
 1. Attribute constraints - Eg. data types on columns
-2. Key constraints - Primary keys
-3. Referential integrity constraints - Enforced through foreign keys
+2. Key constraints - **Primary keys**
+3. Referential integrity constraints - Enforced through **foreign keys**
 
-- Primary key
-- Foreign key
 - Auto-increment
 - Unique
 - NOT NULL
@@ -286,6 +284,7 @@ FROM professors
 WHERE affiliations.firstname = professors.firstname 
 	AND affiliations.lastname = professors.lastname;
 ````
+
 ### NULL Values
 
 Take note that we cannot use `!=` or `<>` on NULL values.
@@ -394,7 +393,8 @@ ORDER BY City;
 To return values that are numeric only.
 
 ````sql
-SELECT ISNUMERIC(student_score)
+SELECT 
+	ISNUMERIC(student_score)
 FROM School.Scores;
 ````
 
