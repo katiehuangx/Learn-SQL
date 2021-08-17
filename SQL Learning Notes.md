@@ -72,7 +72,7 @@ CREATE TABLE rooms (
 
 ````sql
 CRREATE TABLE students (
-  ssn INTEGER NOT NULL, -- only contains whole numbers
+  ssn INTEGER PRIMARY KEY NOT NULL, -- set as primary key and not null
   name VARCHAR(64),
   dob DATE,
   average_grade NUMERIC (3,2), -- precision of 3 and scale of 2 meaning, eg. 100.00
@@ -164,6 +164,11 @@ ADD COLUMN Language
 TEXT DEFAULT "English"; -- Set 'English' as the default values in all rows in Language column
 ````
 
+````sql
+ALTER TABLE guests
+ADD CONSTRAINT first_name_unq UNIQUE (first_name); -- 'first_name-unq' represents name of the constraint
+````
+
 ### Change Type
 _Note: Functions below are for PostgreSQL_
 
@@ -178,6 +183,18 @@ ALTER TABLE student
 ALTER COLUMN average_grade -- eg. original output is 98.68
 TYPE integer -- Alter to integer output, eg. 98 (normally, will round down)
 USING ROUND(average_grade); -- Round up integer instead to, eg. 99
+````
+
+````sql
+ALTER TABLE students
+ALTER COLUMN home_phone
+SET NOT NULL; -- Set not-null constraint
+DROP NOT NULL; -- Drop not-null constraint
+````
+
+````SQL
+ALTER TABLE professors 
+ADD COLUMN id serial -- Add auto-incremental function to id column
 ````
 
 ### Remove/Drop Columns
@@ -210,6 +227,65 @@ Constraints give the data structure and help with consistency and data quality.
 - Unique
 - NOT NULL
 
+### Primary Key
+
+````sql
+-- Set primary key using CONCAT
+UPDATE cars
+SET id = CONCAT(make, model); -- Update id with make + model
+
+ALTER TABLE cars
+ADD CONSTRAINT id_pk PRIMARY KEY(id); -- Make id a primary key
+````
+
+````sq;
+-- Rename the organization column to id
+ALTER TABLE organizations
+RENAME organization TO id;
+
+-- Make id a primary key
+ALTER TABLE organizations
+ADD CONSTRAINT organization_pk PRIMARY KEY (id);
+````
+
+### Foreign Key
+
+````sql
+ALTER TABLE a
+ADD CONSTRAINT a_fkey FOREIGN KEY (b_id) REFERENCES table_b (id)
+````
+
+**Reference a Table with FOREIGN KEY**
+
+For example, you want the `professors` table to reference the `universities` table using `university_id`.
+
+````sql
+-- Rename column to xxx_id
+ALTER TABLE professors
+RENAME COLUMN university_shortname TO university_id;
+
+-- Add a foreign key on professors referencing universities
+ALTER TABLE professors
+ADD CONSTRAINT professors_fkey FOREIGN KEY (university_id) REFERENCES universities (id);
+````
+
+**How to Populate Foreign Key from Another Table**
+
+````sql
+UPDATE table_a
+SET column_to_update = table_b.column_to_update_from
+FROM table_b
+WHERE condition1 AND condition2 AND ...;
+````
+
+For example,
+````sql
+UPDATE affiliations
+SET professor_id = professors.id
+FROM professors
+WHERE affiliations.firstname = professors.firstname 
+	AND affiliations.lastname = professors.lastname;
+````
 ### NULL Values
 
 Take note that we cannot use `!=` or `<>` on NULL values.
@@ -226,21 +302,6 @@ For example, replace NULL values with '99'.
 ````sql
 SELECT WorkOrderID, ScrappedQty, ISNULL(ScrapReasonID, 99) AS ScrapReason
 FROM Production.WorkOrder;
-````
-
-
-**Create Primary Key**
-
-````sql
-CREATE CLUSTERED INDEX IX_guests_guest_id -- Name of your index
-ON guests (guest_id); -- table name and column name
-````
-
-**Create Foreign Key**
-
-````sql
-CREATE NONCLUSTERED INDEX IX_guests_last_name -- Name of your index
-ON guests (last_name); -- table name and column name
 ````
 
 ***
