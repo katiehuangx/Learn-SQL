@@ -11,27 +11,28 @@ Click here to expand!
 
 ## Content
 
-- CRUD Operations
-- Insert records
-- Alter table
-- Table constraints
-- Create index
-- Data types	
-- Base query
-- Filter techniques
-- JOINS
-- Grouping records
-- Functions
-- Window functions
-- Condition statement
-- Create temp table
-- Subquery
-- PIVOT
-- Create and use variables
-- Result set operators
-  - Combine results with UNION
-  - Return distinct rows with EXCEPT
-  - Return common rows with INTERSECT
+1. Order of Execution
+2. CRUD Operations
+3. Relational Database
+	- Create, Update, Alter Table
+  - Insert Values
+  - Table Constraints
+  - Create Index
+4. Data Types	
+5. Base query
+6. Filtering Techniques
+7. Grouping Records
+8. Built-in Functions
+9. Joining Tables
+  - INNER JOIN, LEFT JOIN, RIGHT JOIN, OUTER JOIN, CROSS JOIN, ANTI JOIN
+  - UNION, UNION ALL, EXCEPT, INTERSECT  
+10. Window Functions
+11. Condition Statement
+12. Create Temporary Table
+13. Common Table Expressions (CTE)  
+14. Subquery
+15. PIVOT
+16. Declare Variables
  
 </details>
 
@@ -39,21 +40,19 @@ Click here to expand!
 
 ## 📌 Order of Execution
 
-Sequence of how SQL runs the clauses:
+Sequence of how SQL runs the query:
 
-1. FROM, JOINS - The SQL engine fetches the data from the tables
-2. WHERE - Filters it
-3. GROUP BY - Aggregates data and can remove duplicates
-4. HAVING - Filters aggregated data
-5. SELECT - Selects the columns and expressions to display
-6. DISTINCT - Remove duplicates
-7. UNION, INTERSECT, EXCEPT - Can remove duplicates. UNION ALL include duplicates
-8. ORDER BY - Orders the remaining data
-9. OFFSET, LIMIT - Limits the results
+1. FROM, JOINS - SQL fetches the data from the tables.
+2. WHERE - Filters based on specified condition
+3. GROUP BY - Aggregates / Groups data into groupings and remove duplicates.
+4. HAVING - Filters grouped data based on specified condition.
+5. SELECT - Selects the columns and expressions to display.
+6. DISTINCT - Remove duplicates.
+7. UNION, INTERSECT, EXCEPT - Can remove duplicates. UNION ALL include duplicates.
+8. ORDER BY - Orders the columns.
+9. OFFSET, LIMIT - Limits the results.
 
-## 📌 Table Design
-
-### CRUD Operations
+## 📌 CRUD Operations
 
 - **CREATE** - Create databases, tables or views
 - **READ** - Read using SELECT clause
@@ -112,30 +111,61 @@ DELETE FROM guests
 WHERE customer_id = 1005;
 ````
 
-### Insert Records
+***
+
+## 📌 Relational Database
+
+### Alter Table
 
 ````sql
-INSERT INTO rooms (room_no, bed_type, rate)
-	VALUES ('101', 'King', 120),
-		('102', 'Queen', 100),
-		('103', 'Deluxe', 80),
-		('104', 'King', 120),
-		('105', 'Queen', 100);
+-- ADD new column
+ALTER TABLE guests
+ADD last_name VARCHAR(15);
 ````
 
 ````sql
-INSERT INTO rooms (room_no, bed_type, rate)
-SELECT
-  col_1,
-  col_2,
-  col_3
-FROM other_table
-WHERE --conditions apply
+-- Add new column and set text default
+ALTER TABLE movies
+ADD COLUMN Language TEXT DEFAULT "English"; -- Set 'English' as default values in all rows of Language column
+````
+
+````sql
+-- Alter column's data type
+ALTER TABLE name
+ALTER COLUMN firstname TYPE VARCHAR(128);
+````
+
+````sql
+-- Alter column's data type
+ALTER TABLE student
+ALTER COLUMN average_grade -- eg. original output is 98.68
+TYPE INTEGER -- Alters to integer output, eg. 98 (normally, will round down)
+USING ROUND(average_grade); -- Round up integer instead to, eg. 99
+````
+
+````sql
+-- Set / Drop NOT NULL constraint
+ALTER TABLE students
+ALTER COLUMN home_phone
+SET NOT NULL; -- Set not-null constraint, OR
+DROP NOT NULL; -- Drop not-null constraint
+````
+
+````sql
+-- Drop column
+ALTER TABLE table_name
+DROP COLUMN old_column;
+````
+
+````sql
+-- Rename column
+ALTER TABLE table_name
+RENAME COLUMN old_column TO new_column;
 ````
 
 ### Remove Table
 
-Use `TRUNCATE TABLE` to remove all data from the table with table structure still exists in the database.
+Use `TRUNCATE TABLE` to remove data from table with table structure still existing in the database.
 
 ````sql
 TRUNCATE TABLE rooms;
@@ -147,69 +177,27 @@ Use `DROP TABLE` to delete the entire table including data from the database.
 DROP TABLE rooms;
 ````
 
-***
-
-## 📌 Alter Table
-
-### Add Columns
+### Insert Records
 
 ````sql
-ALTER TABLE guests
-ADD last_name VARCHAR(15);
-````
-
-````sql
-ALTER TABLE movies
-ADD COLUMN Language 
-TEXT DEFAULT "English"; -- Set 'English' as the default values in all rows in Language column
+INSERT INTO rooms (room_no, bed_type, rate)
+SELECT
+  col_1,
+  col_2,
+  col_3
+FROM other_table
+WHERE --conditions apply
 ````
 
 ````sql
-ALTER TABLE guests
-ADD CONSTRAINT first_name_unq UNIQUE (first_name); -- 'first_name-unq' represents name of the constraint
+INSERT INTO rooms (room_no, bed_type, rate)
+	VALUES ('101', 'King', 120),
+		('102', 'Queen', 100),
+		('103', 'Deluxe', 80),
+		('104', 'King', 120),
+		('105', 'Queen', 100);
 ````
 
-### Change Type
-_Note: Functions below are for PostgreSQL_
-
-````sql
-ALTER TABLE name
-ALTER COLUMN name
-TYPE VARCHAR(128);
-````
-
-````sql
-ALTER TABLE student
-ALTER COLUMN average_grade -- eg. original output is 98.68
-TYPE integer -- Alter to integer output, eg. 98 (normally, will round down)
-USING ROUND(average_grade); -- Round up integer instead to, eg. 99
-````
-
-````sql
-ALTER TABLE students
-ALTER COLUMN home_phone
-SET NOT NULL; -- Set not-null constraint
-DROP NOT NULL; -- Drop not-null constraint
-````
-
-````SQL
-ALTER TABLE professors 
-ADD COLUMN id serial -- Add auto-incremental function to id column
-````
-
-### Remove/Drop Columns
-
-````sql
-ALTER TABLE table_name
-DROP COLUMN old_column;
-````
-
-### Rename Table
-
-````sql
-ALTER TABLE table_name
-RENAME COLUMN old_column TO new_column;
-````
 ***
 
 ## 📌 Table Constraints
@@ -224,6 +212,11 @@ Constraints give the data structure and help with consistency and data quality.
 - Auto-increment
 - Unique
 - NOT NULL
+
+````SQL
+ALTER TABLE professors 
+ADD COLUMN id serial -- Add auto-incremental function to id column
+````
 
 ### Primary Key
 
@@ -246,12 +239,19 @@ ALTER TABLE organizations
 ADD CONSTRAINT organization_pk PRIMARY KEY (id);
 ````
 
+````sql
+ALTER TABLE guests
+ADD CONSTRAINT first_name_unq UNIQUE (first_name); -- 'first_name-unq' represents name of the constraint
+````
+
 ### Foreign Key
 
 ````sql
 ALTER TABLE a
 ADD CONSTRAINT a_fkey FOREIGN KEY (b_id) REFERENCES table_b (id)
 ````
+
+
 
 **Reference a Table with FOREIGN KEY**
 
