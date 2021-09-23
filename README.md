@@ -14,7 +14,7 @@ Also, do take note that different courses/websites may use different SQL 'flavou
 - MySQL
 - SQLite and more
 
-Check out my [study notes](https://github.com/katiehuangx/Learn-SQL/blob/main/SQL%20Learning%20Notes.md) on SQL!
+Check out my [study notes](https://github.com/katiehuangx/Learn-SQL/blob/main/SQL%20101.md) on SQL!
 
 ***
 ## 📚 LinkedIn Querying Microsoft SQL Server 2019 course 
