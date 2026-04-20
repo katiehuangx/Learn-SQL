@@ -2,6 +2,8 @@
 
 ## Day 1
 
+DB Fiddle: https://www.db-fiddle.com/f/eb8VonpBjrcnNEhRi5enMw/0
+
 /*
 Find the most popular song with the most plays and least skips, in that order.
 
@@ -57,3 +59,9 @@ GROUP BY song_title
 ORDER BY total_plays DESC, total_skips ASC;
 ```
 
+## Day 2: Santa's jumbled letters
+
+DB Fiddle: https://www.db-fiddle.com/f/eb8VonpBjrcnNEhRi5enMw/0
+
+
+## Day 3:
